@@ -111,7 +111,7 @@ export default function Hero() {
           transition={{ duration: 0.6, delay: 0.1 }}
           style={{ marginBottom: 32, color: 'var(--t3)', letterSpacing: '0.2em' }}
         >
-          Portafolio · 2024
+          Portafolio · 2026
         </motion.p>
 
         {/* Nombre en display grande */}

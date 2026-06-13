@@ -260,7 +260,7 @@ export default function Contact() {
             textTransform: 'uppercase',
             color: 'var(--t3)',
           }}>
-            © 2024 Hongxiang Chen
+            © 2026 Hongxiang Chen
           </span>
           <span style={{
             fontFamily: 'var(--ff-m)',
