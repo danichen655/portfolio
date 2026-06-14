@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { PROFILE } from '../data'
 import Particles from './Particles'
@@ -17,6 +18,15 @@ const fadeIn = (delay = 0) => ({
 })
 
 export default function Hero() {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const scrollTo = (href) => {
     const el = document.querySelector(href)
     if (el) el.scrollIntoView({ behavior: 'smooth' })
@@ -28,7 +38,7 @@ export default function Hero() {
       style={{
         position: 'relative',
         height: '100vh',
-        minHeight: 700,
+        minHeight: isMobile ? 600 : 700,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-end',
@@ -40,12 +50,12 @@ export default function Hero() {
       <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <Particles
           particleColors={['#C8FF00', '#C8FF00', '#C8FF00', '#ffffff', '#aaffaa']}
-          particleCount={180}
+          particleCount={isMobile ? 60 : 180}
           particleSpread={12}
           speed={0.06}
           particleBaseSize={70}
           sizeRandomness={1.2}
-          moveParticlesOnHover={true}
+          moveParticlesOnHover={!isMobile}
           particleHoverFactor={0.6}
           alphaParticles={true}
           cameraDistance={22}
@@ -59,7 +69,7 @@ export default function Hero() {
         position: 'absolute',
         inset: 0,
         backgroundImage: 'radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px)',
-        backgroundSize: '44px 44px',
+        backgroundSize: isMobile ? '32px 32px' : '44px 44px',
         zIndex: 1,
         pointerEvents: 'none',
       }} />
@@ -101,7 +111,12 @@ export default function Hero() {
       {/* Contenido */}
       <div
         className="wrap"
-        style={{ position: 'relative', zIndex: 3, paddingBottom: 72, paddingTop: 72 }}
+        style={{
+          position: 'relative',
+          zIndex: 3,
+          paddingBottom: isMobile ? 40 : 72,
+          paddingTop: isMobile ? 40 : 72,
+        }}
       >
         {/* Etiqueta de año */}
         <motion.p
@@ -109,7 +124,12 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          style={{ marginBottom: 32, color: 'var(--t3)', letterSpacing: '0.2em' }}
+          style={{
+            marginBottom: isMobile ? 20 : 32,
+            color: 'var(--t3)',
+            letterSpacing: '0.2em',
+            fontSize: isMobile ? '8px' : '10.5px',
+          }}
         >
           Portafolio · 2026
         </motion.p>
@@ -129,7 +149,7 @@ export default function Hero() {
                 fontWeight: 700,
                 lineHeight: 0.88,
                 letterSpacing: '-0.04em',
-                fontSize: 'clamp(80px, 11.5vw, 196px)',
+                fontSize: isMobile ? 'clamp(48px, 14vw, 80px)' : 'clamp(80px, 11.5vw, 196px)',
                 color: i === 0 ? 'var(--accent)' : 'var(--t1)',
                 userSelect: 'none',
               }}
@@ -144,21 +164,31 @@ export default function Hero() {
           initial="hidden"
           animate="visible"
           variants={fadeIn(0.7)}
-          style={{ display: 'flex', alignItems: 'center', gap: 32, marginTop: 32 }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: isMobile ? 16 : 32,
+            marginTop: isMobile ? 20 : 32,
+            flexWrap: 'wrap',
+          }}
         >
-          <div style={{ width: 1, height: 48, background: 'var(--b2)' }} />
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <div style={{
+            width: 1,
+            height: isMobile ? 36 : 48,
+            background: 'var(--b2)',
+          }} />
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {PROFILE.roles.map((role) => (
               <span
                 key={role}
                 style={{
                   fontFamily: 'var(--ff-m)',
-                  fontSize: 11,
+                  fontSize: isMobile ? 9 : 11,
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
                   color: 'var(--t2)',
                   border: '1px solid var(--b2)',
-                  padding: '6px 14px',
+                  padding: isMobile ? '4px 10px' : '6px 14px',
                 }}
               >
                 {role}
@@ -177,9 +207,9 @@ export default function Hero() {
             display: 'flex',
             alignItems: 'center',
             gap: 12,
-            marginTop: 56,
+            marginTop: isMobile ? 32 : 56,
             fontFamily: 'var(--ff-m)',
-            fontSize: 10.5,
+            fontSize: isMobile ? 9 : 10.5,
             letterSpacing: '0.16em',
             textTransform: 'uppercase',
             color: 'var(--t3)',

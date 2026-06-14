@@ -1,9 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { PROJECTS } from '../data'
 
 function ProjectCard({ project, featured = false }) {
   const [hovered, setHovered] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   return (
     <motion.div
@@ -15,7 +23,7 @@ function ProjectCard({ project, featured = false }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         position: 'relative',
-        height: featured ? 520 : 380,
+        height: isMobile ? 280 : (featured ? 520 : 380),
         background: project.gradient,
         overflow: 'hidden',
         cursor: 'none',
@@ -28,7 +36,7 @@ function ProjectCard({ project, featured = false }) {
       <div style={{
         position: 'absolute',
         inset: 0,
-        backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'300\' height=\'300\' filter=\'url(%23n)\' opacity=\'0.08\'/%3E%3C/svg%3E")',
+        backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequenc[...]',
         backgroundSize: '300px 300px',
         zIndex: 1,
         pointerEvents: 'none',
@@ -48,9 +56,9 @@ function ProjectCard({ project, featured = false }) {
       {/* Top row: category + year */}
       <div style={{
         position: 'absolute',
-        top: 24,
-        left: 28,
-        right: 28,
+        top: isMobile ? 16 : 24,
+        left: isMobile ? 16 : 28,
+        right: isMobile ? 16 : 28,
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -58,8 +66,8 @@ function ProjectCard({ project, featured = false }) {
       }}>
         <span style={{
           fontFamily: 'var(--ff-m)',
-          fontSize: 10,
-          letterSpacing: '0.14em',
+          fontSize: 9,
+          letterSpacing: '0.12em',
           textTransform: 'uppercase',
           color: 'rgba(255,255,255,0.5)',
         }}>
@@ -67,7 +75,7 @@ function ProjectCard({ project, featured = false }) {
         </span>
         <span style={{
           fontFamily: 'var(--ff-m)',
-          fontSize: 10,
+          fontSize: 9,
           letterSpacing: '0.1em',
           color: 'rgba(255,255,255,0.3)',
         }}>
@@ -78,14 +86,14 @@ function ProjectCard({ project, featured = false }) {
       {/* Bottom content */}
       <div style={{
         position: 'absolute',
-        bottom: 28,
-        left: 28,
-        right: 28,
+        bottom: isMobile ? 16 : 28,
+        left: isMobile ? 16 : 28,
+        right: isMobile ? 16 : 28,
         zIndex: 3,
       }}>
         <h3 style={{
           fontFamily: 'var(--ff-d)',
-          fontSize: featured ? 32 : 22,
+          fontSize: isMobile ? 18 : (featured ? 32 : 22),
           fontWeight: 600,
           letterSpacing: '-0.02em',
           lineHeight: 1.15,
@@ -95,29 +103,31 @@ function ProjectCard({ project, featured = false }) {
           {project.title}
         </h3>
 
-        {/* Description - reveals on hover */}
-        <div style={{
-          overflow: 'hidden',
-          maxHeight: hovered ? 120 : 0,
-          opacity: hovered ? 1 : 0,
-          transition: 'max-height 0.45s var(--ease), opacity 0.35s ease',
-        }}>
-          <p style={{
-            fontSize: 13.5,
-            lineHeight: 1.65,
-            color: 'rgba(255,255,255,0.55)',
-            marginBottom: 14,
+        {/* Description - reveals on hover (mobile shows on tap) */}
+        {!isMobile && (
+          <div style={{
+            overflow: 'hidden',
+            maxHeight: hovered ? 120 : 0,
+            opacity: hovered ? 1 : 0,
+            transition: 'max-height 0.45s var(--ease), opacity 0.35s ease',
           }}>
-            {project.description}
-          </p>
-        </div>
+            <p style={{
+              fontSize: 13.5,
+              lineHeight: 1.65,
+              color: 'rgba(255,255,255,0.55)',
+              marginBottom: 14,
+            }}>
+              {project.description}
+            </p>
+          </div>
+        )}
 
         {/* Tags */}
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          {project.tags.map(tag => (
+          {project.tags.slice(0, isMobile ? 2 : undefined).map(tag => (
             <span key={tag} style={{
               fontFamily: 'var(--ff-m)',
-              fontSize: 9.5,
+              fontSize: 8.5,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
               color: 'rgba(255,255,255,0.4)',
@@ -148,11 +158,24 @@ function ProjectCard({ project, featured = false }) {
 }
 
 export default function Projects() {
+  const [isMobile, setIsMobile] = useState(false)
+  const [isTablet, setIsTablet] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 480)
+      setIsTablet(window.innerWidth > 480 && window.innerWidth <= 768)
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const featured = PROJECTS.find(p => p.featured)
   const rest     = PROJECTS.filter(p => !p.featured)
 
   return (
-    <section id="work" style={{ padding: '120px 0 140px' }}>
+    <section id="work" style={{ padding: isMobile ? '80px 0 100px' : '120px 0 140px' }}>
       <div className="wrap">
 
         {/* Section header */}
@@ -160,7 +183,10 @@ export default function Projects() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-end',
-          marginBottom: 56,
+          marginBottom: isMobile ? 32 : 56,
+          flexDirection: isMobile ? 'column' : 'row',
+          gap: isMobile ? 16 : 0,
+          alignItems: isMobile ? 'flex-start' : 'flex-end',
         }}>
           <div>
             <motion.p
@@ -180,7 +206,7 @@ export default function Projects() {
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
               style={{
                 fontFamily: 'var(--ff-d)',
-                fontSize: 'clamp(32px, 3.5vw, 56px)',
+                fontSize: isMobile ? 'clamp(24px, 7vw, 36px)' : 'clamp(32px, 3.5vw, 56px)',
                 fontWeight: 700,
                 letterSpacing: '-0.03em',
                 lineHeight: 1,
@@ -197,10 +223,10 @@ export default function Projects() {
             transition={{ duration: 0.6, delay: 0.2 }}
             style={{
               fontFamily: 'var(--ff-m)',
-              fontSize: 11,
+              fontSize: 10,
               letterSpacing: '0.1em',
               color: 'var(--t3)',
-              paddingBottom: 8,
+              paddingBottom: isMobile ? 0 : 8,
             }}
           >
             {PROJECTS.length} proyectos en total
@@ -208,28 +234,32 @@ export default function Projects() {
         </div>
 
         {/* Featured project */}
-        {featured && (
+        {featured && !isMobile && (
           <div style={{ marginBottom: 2 }}>
             <ProjectCard project={featured} featured />
           </div>
         )}
 
-        {/* Grid: 3 columns */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2 }}>
-          {rest.slice(0, 3).map(p => (
+        {/* Grid: responsive columns */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : (isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)'),
+          gap: 2,
+        }}>
+          {rest.slice(0, isMobile ? 2 : 3).map(p => (
             <ProjectCard key={p.id} project={p} />
           ))}
         </div>
 
-        {/* Second row: 2 columns */}
+        {/* Second row: responsive columns */}
         {rest.length > 3 && (
           <div style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
+            gridTemplateColumns: isMobile ? '1fr' : (isTablet ? '1fr' : '1fr 1fr'),
             gap: 2,
             marginTop: 2,
           }}>
-            {rest.slice(3, 5).map(p => (
+            {rest.slice(3, isMobile ? 4 : 5).map(p => (
               <ProjectCard key={p.id} project={p} />
             ))}
           </div>

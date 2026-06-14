@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { PROFILE } from '../data'
 
@@ -9,10 +10,23 @@ const inView = (delay = 0) => ({
 })
 
 export default function Profile() {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return (
-    <section id="about" style={{ padding: '120px 0 140px' }}>
+    <section id="about" style={{ padding: isMobile ? '80px 0 100px' : '120px 0 140px' }}>
       <div className="wrap">
-        <div style={{ display: 'grid', gridTemplateColumns: '420px 1fr', gap: 100 }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : '420px 1fr',
+          gap: isMobile ? 60 : 100,
+        }}>
 
           {/* ── Left: Avatar + Stats ────────────────────────── */}
           <div>
@@ -21,7 +35,7 @@ export default function Profile() {
               <div style={{
                 position: 'relative',
                 width: '100%',
-                aspectRatio: '4/5',
+                aspectRatio: isMobile ? '1/1' : '4/5',
                 background: 'var(--s2)',
                 border: '1px solid var(--b1)',
                 display: 'flex',
@@ -63,7 +77,7 @@ export default function Profile() {
                 <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
                   <div style={{
                     fontFamily: 'var(--ff-d)',
-                    fontSize: 96,
+                    fontSize: isMobile ? 64 : 96,
                     fontWeight: 700,
                     lineHeight: 1,
                     letterSpacing: '-0.06em',
@@ -122,14 +136,14 @@ export default function Profile() {
                 <div
                   key={s.label}
                   style={{
-                    padding: '24px 20px',
+                    padding: isMobile ? '16px 12px' : '24px 20px',
                     background: 'var(--s1)',
                     textAlign: 'center',
                   }}
                 >
                   <div style={{
                     fontFamily: 'var(--ff-m)',
-                    fontSize: 28,
+                    fontSize: isMobile ? 20 : 28,
                     fontWeight: 300,
                     color: 'var(--accent)',
                     lineHeight: 1,
@@ -138,8 +152,8 @@ export default function Profile() {
                   </div>
                   <div style={{
                     fontFamily: 'var(--ff-m)',
-                    fontSize: 9.5,
-                    letterSpacing: '0.14em',
+                    fontSize: isMobile ? 8 : 9.5,
+                    letterSpacing: '0.12em',
                     textTransform: 'uppercase',
                     color: 'var(--t3)',
                     marginTop: 6,
@@ -152,7 +166,7 @@ export default function Profile() {
           </div>
 
           {/* ── Right: Bio ──────────────────────────────────── */}
-          <div style={{ paddingTop: 8 }}>
+          <div style={{ paddingTop: isMobile ? 0 : 8 }}>
             <motion.p className="label" {...inView(0)} style={{ marginBottom: 20 }}>
               Sobre mí
             </motion.p>
@@ -161,7 +175,7 @@ export default function Profile() {
               {...inView(0.1)}
               style={{
                 fontFamily: 'var(--ff-d)',
-                fontSize: 'clamp(36px, 3.5vw, 56px)',
+                fontSize: isMobile ? 'clamp(28px, 6vw, 40px)' : 'clamp(36px, 3.5vw, 56px)',
                 fontWeight: 600,
                 lineHeight: 1.08,
                 letterSpacing: '-0.03em',
@@ -175,7 +189,7 @@ export default function Profile() {
             <motion.p
               {...inView(0.2)}
               style={{
-                fontSize: 17,
+                fontSize: isMobile ? 15 : 17,
                 lineHeight: 1.8,
                 color: 'var(--t2)',
                 maxWidth: 560,
@@ -195,14 +209,20 @@ export default function Profile() {
                 { key: 'LinkedIn',  val: 'hongxiang-chen', href: PROFILE.linkedin },
                 { key: 'Ubicación', val: PROFILE.location, href: null },
               ].map(item => (
-                <div key={item.key} style={{ display: 'flex', alignItems: 'baseline', gap: 24 }}>
+                <div key={item.key} style={{
+                  display: 'flex',
+                  alignItems: isMobile ? 'flex-start' : 'baseline',
+                  gap: isMobile ? 12 : 24,
+                  flexDirection: isMobile ? 'column' : 'row',
+                }}>
                   <span style={{
                     fontFamily: 'var(--ff-m)',
                     fontSize: 9.5,
                     letterSpacing: '0.16em',
                     textTransform: 'uppercase',
                     color: 'var(--t3)',
-                    minWidth: 80,
+                    minWidth: isMobile ? 'unset' : 80,
+                    whiteSpace: 'nowrap',
                   }}>
                     {item.key}
                   </span>
@@ -218,6 +238,7 @@ export default function Profile() {
                         transition: 'color 0.2s',
                         borderBottom: '1px solid var(--b2)',
                         paddingBottom: 1,
+                        wordBreak: 'break-word',
                       }}
                       onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
                       onMouseLeave={e => e.currentTarget.style.color = 'var(--t1)'}
@@ -240,7 +261,7 @@ export default function Profile() {
                   key={role}
                   style={{
                     fontFamily: 'var(--ff-m)',
-                    fontSize: 10.5,
+                    fontSize: isMobile ? 9 : 10.5,
                     letterSpacing: '0.1em',
                     textTransform: 'uppercase',
                     color: 'var(--t2)',
