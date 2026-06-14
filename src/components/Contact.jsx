@@ -94,7 +94,7 @@ export default function Contact() {
             marginBottom: isMobile ? 40 : 64,
           }}
         >
-          HABLEMOS.{' '}
+          CONTACTAME.{' '}
           <span style={{ WebkitTextStroke: '1px var(--accent)', color: 'transparent' }}>
             AHORA.
           </span>
@@ -293,7 +293,7 @@ export default function Contact() {
             textTransform: 'uppercase',
             color: 'var(--t3)',
           }}>
-            © 2026 Hongxiang Chen
+            © {new Date().getFullYear()} Hongxiang Chen
           </span>
           <span style={{
             fontFamily: 'var(--ff-m)',

@@ -131,7 +131,7 @@ export default function Hero() {
             fontSize: isMobile ? '8px' : '10.5px',
           }}
         >
-          Portafolio · 2026
+          Portafolio · {new Date().getFullYear()}
         </motion.p>
 
         {/* Nombre en display grande */}

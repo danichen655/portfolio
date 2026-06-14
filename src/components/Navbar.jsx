@@ -128,7 +128,7 @@ export default function Navbar() {
             e.currentTarget.style.borderColor = 'rgba(200,255,0,0.3)'
           }}
         >
-          Hablemos
+          Contactame
         </a>
       )}
 
@@ -215,7 +215,7 @@ export default function Navbar() {
                 transition: 'background 0.25s, color 0.25s, border-color 0.25s',
               }}
             >
-              Hablemos
+              Contactame
             </motion.a>
           </motion.div>
         )}
