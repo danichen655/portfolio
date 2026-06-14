@@ -1,7 +1,17 @@
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { SKILLS } from '../data'
 
 function SkillCard({ skill, index }) {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 32 }}
@@ -11,7 +21,7 @@ function SkillCard({ skill, index }) {
       style={{
         background: 'var(--s1)',
         border: '1px solid var(--b1)',
-        padding: '40px 36px 44px',
+        padding: isMobile ? '28px 20px 32px' : '40px 36px 44px',
         position: 'relative',
         overflow: 'hidden',
         transition: 'border-color 0.3s',
@@ -25,7 +35,7 @@ function SkillCard({ skill, index }) {
         top: 20,
         right: 28,
         fontFamily: 'var(--ff-m)',
-        fontSize: 80,
+        fontSize: isMobile ? 48 : 80,
         fontWeight: 300,
         color: 'var(--t1)',
         opacity: 0.025,
@@ -38,7 +48,7 @@ function SkillCard({ skill, index }) {
       {/* Icon */}
       <div style={{
         fontFamily: 'var(--ff-m)',
-        fontSize: 22,
+        fontSize: isMobile ? 18 : 22,
         color: 'var(--accent)',
         marginBottom: 20,
         lineHeight: 1,
@@ -49,21 +59,21 @@ function SkillCard({ skill, index }) {
       {/* Category */}
       <h3 style={{
         fontFamily: 'var(--ff-d)',
-        fontSize: 22,
+        fontSize: isMobile ? 18 : 22,
         fontWeight: 600,
         letterSpacing: '-0.02em',
-        marginBottom: 28,
+        marginBottom: 20,
         color: 'var(--t1)',
       }}>
         {skill.category}
       </h3>
 
       {/* Divider */}
-      <div style={{ height: 1, background: 'var(--b1)', marginBottom: 24 }} />
+      <div style={{ height: 1, background: 'var(--b1)', marginBottom: 20 }} />
 
       {/* Skill list */}
-      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
-        {skill.items.map((item, i) => (
+      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {skill.items.slice(0, isMobile ? 4 : undefined).map((item, i) => (
           <li
             key={item}
             style={{
@@ -71,7 +81,7 @@ function SkillCard({ skill, index }) {
               alignItems: 'center',
               gap: 12,
               fontFamily: 'var(--ff-b)',
-              fontSize: 14,
+              fontSize: isMobile ? 13 : 14,
               color: 'var(--t2)',
               lineHeight: 1,
             }}
@@ -104,17 +114,30 @@ function SkillCard({ skill, index }) {
 }
 
 export default function Skills() {
+  const [isMobile, setIsMobile] = useState(false)
+  const [isTablet, setIsTablet] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 480)
+      setIsTablet(window.innerWidth > 480 && window.innerWidth <= 768)
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return (
-    <section id="skills" style={{ padding: '120px 0 140px' }}>
+    <section id="skills" style={{ padding: isMobile ? '80px 0 100px' : '120px 0 140px' }}>
       <div className="wrap">
 
         {/* Header */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 48,
-          alignItems: 'end',
-          marginBottom: 64,
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          gap: isMobile ? 32 : 48,
+          alignItems: isMobile ? 'start' : 'end',
+          marginBottom: isMobile ? 40 : 64,
         }}>
           <div>
             <motion.p
@@ -134,7 +157,7 @@ export default function Skills() {
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
               style={{
                 fontFamily: 'var(--ff-d)',
-                fontSize: 'clamp(32px, 3.5vw, 56px)',
+                fontSize: isMobile ? 'clamp(24px, 7vw, 36px)' : 'clamp(32px, 3.5vw, 56px)',
                 fontWeight: 700,
                 letterSpacing: '-0.03em',
                 lineHeight: 1,
@@ -151,20 +174,20 @@ export default function Skills() {
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             style={{
-              fontSize: 15,
+              fontSize: isMobile ? 14 : 15,
               lineHeight: 1.75,
               color: 'var(--t2)',
               maxWidth: 480,
             }}
           >
-            Cuatro disciplinas, una práctica unificada. Trabajo en todo el espectro — desde escribir código hasta construir marcas — aportando pensamiento sistemático a los problemas creativos y creatividad a los técnicos.
+            Cuatro disciplinas, una práctica unificada. Trabajo en todo el espectro — desde escribir código hasta construir marcas — aportando pensamiento sistemático a los problemas creat[...]
           </motion.p>
         </div>
 
-        {/* Skills grid */}
+        {/* Skills grid - responsive columns */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
+          gridTemplateColumns: isMobile ? '1fr' : (isTablet ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)'),
           gap: 2,
         }}>
           {SKILLS.map((skill, i) => (

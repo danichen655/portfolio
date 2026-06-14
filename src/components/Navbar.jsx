@@ -10,6 +10,7 @@ const LINKS = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const navRef = useRef(null)
 
   useEffect(() => {
@@ -22,7 +23,10 @@ export default function Navbar() {
     e.preventDefault()
     const el = document.querySelector(href)
     if (el) el.scrollIntoView({ behavior: 'smooth' })
+    setMenuOpen(false)
   }
+
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
 
   return (
     <nav ref={navRef} style={{
@@ -31,7 +35,7 @@ export default function Navbar() {
       left: 0,
       right: 0,
       zIndex: 100,
-      padding: '0 64px',
+      padding: isMobile ? '0 20px' : '0 64px',
       height: 72,
       display: 'flex',
       alignItems: 'center',
@@ -59,56 +63,135 @@ export default function Navbar() {
         HC
       </a>
 
-      {/* Links */}
-      <ul style={{ display: 'flex', gap: 48, listStyle: 'none' }}>
-        {LINKS.map(l => (
-          <li key={l.href}>
+      {/* Desktop Links */}
+      {!isMobile && (
+        <ul style={{ display: 'flex', gap: 48, listStyle: 'none' }}>
+          {LINKS.map(l => (
+            <li key={l.href}>
+              <a
+                href={l.href}
+                onClick={e => scrollTo(e, l.href)}
+                style={{
+                  fontFamily: 'var(--ff-m)',
+                  fontSize: 11,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: 'var(--t2)',
+                  transition: 'color 0.2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.color = 'var(--t1)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'var(--t2)'}
+              >
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {/* Desktop CTA */}
+      {!isMobile && (
+        <a
+          href={`mailto:${PROFILE.email}`}
+          style={{
+            fontFamily: 'var(--ff-m)',
+            fontSize: 11,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: 'var(--accent)',
+            border: '1px solid rgba(200,255,0,0.3)',
+            padding: '9px 22px',
+            transition: 'background 0.25s, color 0.25s, border-color 0.25s',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.background = 'var(--accent)'
+            e.currentTarget.style.color = '#080808'
+            e.currentTarget.style.borderColor = 'var(--accent)'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.background = 'transparent'
+            e.currentTarget.style.color = 'var(--accent)'
+            e.currentTarget.style.borderColor = 'rgba(200,255,0,0.3)'
+          }}
+        >
+          Hablemos
+        </a>
+      )}
+
+      {/* Mobile Menu Button */}
+      {isMobile && (
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 5,
+            width: 24,
+            height: 24,
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: 0,
+          }}
+        >
+          <div style={{ width: 24, height: 2, background: 'var(--accent)', transition: 'all 0.3s' }} />
+          <div style={{ width: 18, height: 2, background: 'var(--accent)', transition: 'all 0.3s' }} />
+          <div style={{ width: 24, height: 2, background: 'var(--accent)', transition: 'all 0.3s' }} />
+        </button>
+      )}
+
+      {/* Mobile Menu */}
+      {isMobile && menuOpen && (
+        <div style={{
+          position: 'absolute',
+          top: 72,
+          left: 0,
+          right: 0,
+          background: 'rgba(8,8,8,0.95)',
+          backdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 16,
+        }}>
+          {LINKS.map(l => (
             <a
+              key={l.href}
               href={l.href}
               onClick={e => scrollTo(e, l.href)}
               style={{
                 fontFamily: 'var(--ff-m)',
-                fontSize: 11,
-                letterSpacing: '0.14em',
+                fontSize: 12,
+                letterSpacing: '0.12em',
                 textTransform: 'uppercase',
                 color: 'var(--t2)',
-                transition: 'color 0.2s',
+                padding: '12px 0',
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
               }}
-              onMouseEnter={e => e.currentTarget.style.color = 'var(--t1)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'var(--t2)'}
             >
               {l.label}
             </a>
-          </li>
-        ))}
-      </ul>
-
-      {/* CTA */}
-      <a
-        href={`mailto:${PROFILE.email}`}
-        style={{
-          fontFamily: 'var(--ff-m)',
-          fontSize: 11,
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          color: 'var(--accent)',
-          border: '1px solid rgba(200,255,0,0.3)',
-          padding: '9px 22px',
-          transition: 'background 0.25s, color 0.25s, border-color 0.25s',
-        }}
-        onMouseEnter={e => {
-          e.currentTarget.style.background = 'var(--accent)'
-          e.currentTarget.style.color = '#080808'
-          e.currentTarget.style.borderColor = 'var(--accent)'
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.background = 'transparent'
-          e.currentTarget.style.color = 'var(--accent)'
-          e.currentTarget.style.borderColor = 'rgba(200,255,0,0.3)'
-        }}
-      >
-        Hablemos
-      </a>
+          ))}
+          <a
+            href={`mailto:${PROFILE.email}`}
+            style={{
+              fontFamily: 'var(--ff-m)',
+              fontSize: 12,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'var(--accent)',
+              border: '1px solid rgba(200,255,0,0.3)',
+              padding: '10px 16px',
+              marginTop: 8,
+              textAlign: 'center',
+              transition: 'background 0.25s, color 0.25s, border-color 0.25s',
+            }}
+          >
+            Hablemos
+          </a>
+        </div>
+      )}
     </nav>
   )
 }

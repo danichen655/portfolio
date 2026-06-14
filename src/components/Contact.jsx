@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { PROFILE } from '../data'
 
@@ -11,6 +11,14 @@ const inView = (delay = 0) => ({
 
 export default function Contact() {
   const [copied, setCopied] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const copyEmail = () => {
     navigator.clipboard.writeText(PROFILE.email)
@@ -23,13 +31,13 @@ export default function Contact() {
       id="contact"
       style={{
         position: 'relative',
-        minHeight: '100vh',
+        minHeight: isMobile ? '100vh' : '100vh',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         background: 'var(--s1)',
         overflow: 'hidden',
-        padding: '120px 0 0',
+        padding: isMobile ? '80px 0 0' : '120px 0 0',
       }}
     >
       {/* Cuadrícula de fondo */}
@@ -48,7 +56,7 @@ export default function Contact() {
         bottom: '20%',
         left: '50%',
         transform: 'translateX(-50%)',
-        width: '70vw',
+        width: isMobile ? '100vw' : '70vw',
         height: '40vh',
         background: 'radial-gradient(ellipse, rgba(200,255,0,0.03) 0%, transparent 70%)',
         zIndex: 0,
@@ -64,10 +72,11 @@ export default function Contact() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
+          padding: isMobile ? '0 16px' : '0 64px',
         }}
       >
         {/* Etiqueta */}
-        <motion.p className="label" {...inView(0)} style={{ marginBottom: 32 }}>
+        <motion.p className="label" {...inView(0)} style={{ marginBottom: isMobile ? 24 : 32 }}>
           Conectemos
         </motion.p>
 
@@ -76,11 +85,11 @@ export default function Contact() {
           {...inView(0.1)}
           style={{
             fontFamily: 'var(--ff-d)',
-            fontSize: 'clamp(72px, 10vw, 168px)',
+            fontSize: isMobile ? 'clamp(40px, 12vw, 80px)' : 'clamp(72px, 10vw, 168px)',
             fontWeight: 700,
             lineHeight: 0.9,
             letterSpacing: '-0.04em',
-            marginBottom: 64,
+            marginBottom: isMobile ? 40 : 64,
           }}
         >
           HABLEMOS.{' '}
@@ -92,20 +101,20 @@ export default function Contact() {
         {/* Fila de contenido */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 80,
-          marginBottom: 80,
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          gap: isMobile ? 40 : 80,
+          marginBottom: isMobile ? 40 : 80,
           alignItems: 'start',
         }}>
 
           {/* Izquierda: descripción + email */}
           <motion.div {...inView(0.2)}>
             <p style={{
-              fontSize: 17,
+              fontSize: isMobile ? 15 : 17,
               lineHeight: 1.8,
               color: 'var(--t2)',
               maxWidth: 460,
-              marginBottom: 48,
+              marginBottom: isMobile ? 32 : 48,
             }}>
               ¿Tienes un proyecto en mente? ¿Quieres explorar una colaboración?
               O simplemente di hola. Siempre estoy abierto a conversaciones
@@ -124,17 +133,24 @@ export default function Contact() {
               }}>
                 Correo electrónico
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: isMobile ? 12 : 20,
+                flexDirection: isMobile ? 'column' : 'row',
+                alignItems: isMobile ? 'flex-start' : 'center',
+              }}>
                 <a
                   href={`mailto:${PROFILE.email}`}
                   style={{
                     fontFamily: 'var(--ff-m)',
-                    fontSize: 20,
+                    fontSize: isMobile ? 16 : 20,
                     fontWeight: 400,
                     color: 'var(--t1)',
                     borderBottom: '1px solid var(--b2)',
                     paddingBottom: 4,
                     transition: 'color 0.2s, border-color 0.2s',
+                    wordBreak: 'break-all',
                   }}
                   onMouseEnter={e => {
                     e.currentTarget.style.color = 'var(--accent)'
@@ -151,13 +167,14 @@ export default function Contact() {
                   onClick={copyEmail}
                   style={{
                     fontFamily: 'var(--ff-m)',
-                    fontSize: 9.5,
-                    letterSpacing: '0.14em',
+                    fontSize: 9,
+                    letterSpacing: '0.12em',
                     textTransform: 'uppercase',
                     color: copied ? 'var(--accent)' : 'var(--t3)',
                     border: `1px solid ${copied ? 'var(--accent)' : 'var(--b2)'}`,
-                    padding: '7px 14px',
+                    padding: '7px 12px',
                     transition: 'color 0.25s, border-color 0.25s',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {copied ? '¡Copiado!' : 'Copiar'}
@@ -193,9 +210,10 @@ export default function Contact() {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    padding: '20px 0',
+                    padding: isMobile ? '16px 0' : '20px 0',
                     borderBottom: '1px solid var(--b1)',
                     transition: 'border-color 0.25s',
+                    gap: 12,
                   }}
                   onMouseEnter={e => {
                     e.currentTarget.style.borderColor = 'var(--b2)'
@@ -211,7 +229,7 @@ export default function Contact() {
                       className="link-label"
                       style={{
                         fontFamily: 'var(--ff-d)',
-                        fontSize: 22,
+                        fontSize: isMobile ? 18 : 22,
                         fontWeight: 500,
                         letterSpacing: '-0.01em',
                         color: 'var(--t1)',
@@ -222,7 +240,7 @@ export default function Contact() {
                     </div>
                     <div style={{
                       fontFamily: 'var(--ff-m)',
-                      fontSize: 10,
+                      fontSize: 9,
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
                       color: 'var(--t3)',
@@ -231,7 +249,7 @@ export default function Contact() {
                       {link.sub}
                     </div>
                   </div>
-                  <span style={{ fontFamily: 'var(--ff-m)', fontSize: 18, color: 'var(--t3)' }}>
+                  <span style={{ fontFamily: 'var(--ff-m)', fontSize: 16, color: 'var(--t3)', flexShrink: 0 }}>
                     ↗
                   </span>
                 </a>
@@ -250,12 +268,15 @@ export default function Contact() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: '24px 64px',
+            padding: isMobile ? '16px 16px' : '24px 64px',
+            gap: isMobile ? 8 : 0,
+            flexDirection: isMobile ? 'column' : 'row',
+            textAlign: isMobile ? 'center' : 'left',
           }}
         >
           <span style={{
             fontFamily: 'var(--ff-m)',
-            fontSize: 10.5,
+            fontSize: isMobile ? 9 : 10.5,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
             color: 'var(--t3)',
@@ -264,7 +285,7 @@ export default function Contact() {
           </span>
           <span style={{
             fontFamily: 'var(--ff-m)',
-            fontSize: 10.5,
+            fontSize: isMobile ? 8 : 10.5,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
             color: 'var(--t3)',
@@ -273,7 +294,7 @@ export default function Contact() {
           </span>
           <span style={{
             fontFamily: 'var(--ff-m)',
-            fontSize: 10.5,
+            fontSize: isMobile ? 8 : 10.5,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
             color: 'var(--t3)',
