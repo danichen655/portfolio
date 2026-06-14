@@ -2,8 +2,9 @@ export const PROFILE = {
   name: { first: 'Hongxiang', last: 'Chen' },
   tagline: 'Programador · Diseñador Visual · Diseñador de IA · Diseñador de Marca',
   bio: 'Diseño y construyo en la intersección de tecnología, identidad de marca e inteligencia artificial. Basado en España, creo experiencias digitales que combinan precisión técnica con impacto visual — desde sistemas de marca generativos hasta aplicaciones web interactivas.',
-  email: 'dchen@alpexenergia.es',
+  email: 'xiang655@gmail.com',
   linkedin: 'https://www.linkedin.com/in/hongxiang-chen/',
+  github: 'https://github.com/danichen655',
   location: 'España',
   roles: ['Programador', 'Diseñador Visual', 'Diseñador de IA', 'Diseñador de Marca'],
   stats: [
@@ -71,25 +72,52 @@ export const PROJECTS = [
   },
 ];
 
+export const TIMELINE = [
+  {
+    year: '2017',
+    type: 'education',
+    title: 'ESO y Bachillerato',
+    org: 'IES Sanchez Caton',
+    location: 'Galicia',
+    description: 'Ciencias y tecnología.',
+  },
+  {
+    year: '2018 – 2023',
+    type: 'education',
+    title: 'Ingeniería Informática',
+    org: 'Universidad Complutense de Madrid',
+    location: 'Madrid',
+    description: 'Itinerario de computación: Inteligencia Artificial, Algoritmos, Estructuras de datos, Programación declarativa y concurrente.',
+  },
+  {
+    year: 'Sept. 2022 – Actualidad',
+    type: 'work',
+    title: 'Data Engineer',
+    org: 'NTT DATA',
+    location: 'Madrid',
+    description: 'Ingesta y tratamiento de datos para BBVA (ETL). Migración del Framework Shifu basado en Scala. Migración de front Python 2.7 → 3.7. Nuevas funcionalidades en Java.',
+  },
+]
+
 export const SKILLS = [
   {
     category: 'Programación',
     icon: '⟨/⟩',
-    items: ['React / Next.js', 'TypeScript', 'Python', 'Node.js', 'Three.js / WebGL', 'D3.js', 'CSS & Motion'],
+    items: ['Python', 'Java', 'C / C++', 'Scala', 'Haskell', 'Prolog', 'PySpark'],
   },
   {
-    category: 'Diseño Visual',
+    category: 'Datos & Cloud',
     icon: '◈',
-    items: ['Figma / Sistemas de Diseño', 'Adobe After Effects', 'Illustrator / Photoshop', 'Blender / C4D', 'Tipografía', 'Motion Design', 'Maquetación Editorial'],
+    items: ['MySQL', 'Pandas / NumPy', 'Docker', 'GCP / GAE', 'ETL', 'Git / Bitbucket'],
   },
   {
-    category: 'IA & Generativa',
+    category: 'Inteligencia Artificial',
     icon: '∿',
-    items: ['Midjourney / DALL-E', 'Stable Diffusion', 'ComfyUI', 'Runway ML', 'GPT-4 / Claude', 'Entrenamiento LoRA', 'Ingeniería de Prompts'],
+    items: ['Machine Learning', 'Deep Learning', 'PLN', 'Algoritmos Genéticos', 'Sistemas de Recomendación', 'Búsqueda en estados'],
   },
   {
-    category: 'Diseño de Marca',
+    category: 'Idiomas',
     icon: '◉',
-    items: ['Diseño de Identidad', 'Sistemas Visuales', 'Estrategia de Marca', 'Teoría del Color', 'Dirección Tipográfica', 'Arquitectura de Marca', 'Guías de Estilo'],
+    items: ['Español (Nativo)', 'Chino (Nativo)', 'Inglés (Medio)'],
   },
 ];

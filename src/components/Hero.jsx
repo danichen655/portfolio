@@ -159,6 +159,22 @@ export default function Hero() {
           ))}
         </div>
 
+        {/* Alias */}
+        <motion.p
+          initial="hidden"
+          animate="visible"
+          variants={fadeIn(0.55)}
+          style={{
+            fontFamily: 'var(--ff-m)',
+            fontSize: isMobile ? 14 : 18,
+            letterSpacing: '0.08em',
+            color: 'var(--t3)',
+            marginTop: isMobile ? 12 : 16,
+          }}
+        >
+          · <span style={{ color: 'var(--t2)' }}>(DaniChen)</span>
+        </motion.p>
+
         {/* Roles */}
         <motion.div
           initial="hidden"

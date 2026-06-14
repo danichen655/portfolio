@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { PROFILE } from '../data'
 
 const LINKS = [
-  { label: 'Trabajos',    href: '#work'    },
-  { label: 'Perfil',      href: '#about'   },
-  { label: 'Habilidades', href: '#skills'  },
-  { label: 'Contacto',    href: '#contact' },
+  { label: 'Trabajos',    href: '#work'     },
+  { label: 'Perfil',      href: '#about'    },
+  { label: 'Trayectoria', href: '#timeline' },
+  { label: 'Habilidades', href: '#skills'   },
+  { label: 'Contacto',    href: '#contact'  },
 ]
 
 export default function Navbar() {
@@ -153,57 +155,71 @@ export default function Navbar() {
       )}
 
       {/* Mobile Menu */}
-      {isMobile && menuOpen && (
-        <div style={{
-          position: 'absolute',
-          top: 72,
-          left: 0,
-          right: 0,
-          background: 'rgba(8,8,8,0.95)',
-          backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
-          padding: '20px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 16,
-        }}>
-          {LINKS.map(l => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={e => scrollTo(e, l.href)}
+      <AnimatePresence>
+        {isMobile && menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              position: 'absolute',
+              top: 72,
+              left: 0,
+              right: 0,
+              background: 'rgba(8,8,8,0.95)',
+              backdropFilter: 'blur(20px)',
+              borderBottom: '1px solid rgba(255,255,255,0.06)',
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 16,
+            }}
+          >
+            {LINKS.map((l, i) => (
+              <motion.a
+                key={l.href}
+                href={l.href}
+                onClick={e => scrollTo(e, l.href)}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1], delay: i * 0.05 }}
+                style={{
+                  fontFamily: 'var(--ff-m)',
+                  fontSize: 12,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: 'var(--t2)',
+                  padding: '12px 0',
+                  borderBottom: '1px solid rgba(255,255,255,0.05)',
+                }}
+              >
+                {l.label}
+              </motion.a>
+            ))}
+            <motion.a
+              href={`mailto:${PROFILE.email}`}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1], delay: LINKS.length * 0.05 }}
               style={{
                 fontFamily: 'var(--ff-m)',
                 fontSize: 12,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                color: 'var(--t2)',
-                padding: '12px 0',
-                borderBottom: '1px solid rgba(255,255,255,0.05)',
+                color: 'var(--accent)',
+                border: '1px solid rgba(200,255,0,0.3)',
+                padding: '10px 16px',
+                marginTop: 8,
+                textAlign: 'center',
+                transition: 'background 0.25s, color 0.25s, border-color 0.25s',
               }}
             >
-              {l.label}
-            </a>
-          ))}
-          <a
-            href={`mailto:${PROFILE.email}`}
-            style={{
-              fontFamily: 'var(--ff-m)',
-              fontSize: 12,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: 'var(--accent)',
-              border: '1px solid rgba(200,255,0,0.3)',
-              padding: '10px 16px',
-              marginTop: 8,
-              textAlign: 'center',
-              transition: 'background 0.25s, color 0.25s, border-color 0.25s',
-            }}
-          >
-            Hablemos
-          </a>
-        </div>
-      )}
+              Hablemos
+            </motion.a>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   )
 }

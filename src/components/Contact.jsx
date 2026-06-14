@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { PROFILE } from '../data'
 
+import { IconLinkedIn, IconGitHub, IconMail } from './Icons'
+
 const inView = (delay = 0) => ({
   initial:     { opacity: 0, y: 28 },
   whileInView: { opacity: 1, y: 0 },
@@ -135,7 +137,6 @@ export default function Contact() {
               </p>
               <div style={{
                 display: 'flex',
-                alignItems: 'center',
                 gap: isMobile ? 12 : 20,
                 flexDirection: isMobile ? 'column' : 'row',
                 alignItems: isMobile ? 'flex-start' : 'center',
@@ -198,8 +199,9 @@ export default function Contact() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               {[
-                { label: 'LinkedIn', url: PROFILE.linkedin,           sub: 'Perfil profesional' },
-                { label: 'Email',    url: `mailto:${PROFILE.email}`,  sub: 'Mensaje directo'    },
+                { label: 'LinkedIn', url: PROFILE.linkedin,          sub: 'Perfil profesional', Icon: IconLinkedIn },
+                { label: 'GitHub',   url: PROFILE.github,            sub: 'Repositorios',        Icon: IconGitHub   },
+                { label: 'Email',    url: `mailto:${PROFILE.email}`, sub: 'Mensaje directo',     Icon: IconMail     },
               ].map(link => (
                 <a
                   key={link.label}
@@ -218,35 +220,45 @@ export default function Contact() {
                   onMouseEnter={e => {
                     e.currentTarget.style.borderColor = 'var(--b2)'
                     e.currentTarget.querySelector('.link-label').style.color = 'var(--accent)'
+                    e.currentTarget.querySelector('.link-icon').style.color = 'var(--accent)'
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.borderColor = 'var(--b1)'
                     e.currentTarget.querySelector('.link-label').style.color = 'var(--t1)'
+                    e.currentTarget.querySelector('.link-icon').style.color = 'var(--t3)'
                   }}
                 >
-                  <div>
-                    <div
-                      className="link-label"
-                      style={{
-                        fontFamily: 'var(--ff-d)',
-                        fontSize: isMobile ? 18 : 22,
-                        fontWeight: 500,
-                        letterSpacing: '-0.01em',
-                        color: 'var(--t1)',
-                        transition: 'color 0.25s',
-                      }}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                    <span
+                      className="link-icon"
+                      style={{ color: 'var(--t3)', transition: 'color 0.25s', flexShrink: 0 }}
                     >
-                      {link.label}
-                    </div>
-                    <div style={{
-                      fontFamily: 'var(--ff-m)',
-                      fontSize: 9,
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      color: 'var(--t3)',
-                      marginTop: 3,
-                    }}>
-                      {link.sub}
+                      <link.Icon />
+                    </span>
+                    <div>
+                      <div
+                        className="link-label"
+                        style={{
+                          fontFamily: 'var(--ff-d)',
+                          fontSize: isMobile ? 18 : 22,
+                          fontWeight: 500,
+                          letterSpacing: '-0.01em',
+                          color: 'var(--t1)',
+                          transition: 'color 0.25s',
+                        }}
+                      >
+                        {link.label}
+                      </div>
+                      <div style={{
+                        fontFamily: 'var(--ff-m)',
+                        fontSize: 9,
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                        color: 'var(--t3)',
+                        marginTop: 3,
+                      }}>
+                        {link.sub}
+                      </div>
                     </div>
                   </div>
                   <span style={{ fontFamily: 'var(--ff-m)', fontSize: 16, color: 'var(--t3)', flexShrink: 0 }}>

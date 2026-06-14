@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { PROFILE } from '../data'
+import { IconLinkedIn, IconGitHub, IconMail, IconLocation } from './Icons'
 
 const inView = (delay = 0) => ({
   initial:    { opacity: 0, y: 28 },
@@ -73,41 +74,21 @@ export default function Profile() {
                   )
                 })}
 
-                {/* Monogram */}
-                <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-                  <div style={{
-                    fontFamily: 'var(--ff-d)',
-                    fontSize: isMobile ? 64 : 96,
-                    fontWeight: 700,
-                    lineHeight: 1,
-                    letterSpacing: '-0.06em',
-                    color: 'var(--t1)',
-                    opacity: 0.08,
-                    userSelect: 'none',
-                  }}>
-                    HC
-                  </div>
-                  <p style={{
-                    fontFamily: 'var(--ff-m)',
-                    fontSize: 10,
-                    letterSpacing: '0.2em',
-                    textTransform: 'uppercase',
-                    color: 'var(--t3)',
-                    marginTop: 12,
-                  }}>
-                    — Foto de Perfil —
-                  </p>
-                  <p style={{
-                    fontFamily: 'var(--ff-m)',
-                    fontSize: 9,
-                    letterSpacing: '0.14em',
-                    color: 'var(--t3)',
-                    marginTop: 4,
-                    opacity: 0.6,
-                  }}>
-                    Reemplaza con tu imagen
-                  </p>
-                </div>
+                {/* Foto */}
+                <img
+                  src="/avatar.jpg"
+                  alt="Hongxiang Chen"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: 'center top',
+                    zIndex: 1,
+                    mixBlendMode: 'lighten',
+                  }}
+                />
 
                 {/* Accent line bottom */}
                 <div style={{
@@ -203,26 +184,34 @@ export default function Profile() {
             <motion.div {...inView(0.25)} style={{ height: 1, background: 'var(--b1)', marginBottom: 40 }} />
 
             {/* Contact details */}
-            <motion.div {...inView(0.3)} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <motion.div {...inView(0.3)} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               {[
-                { key: 'Email',     val: PROFILE.email,    href: `mailto:${PROFILE.email}` },
-                { key: 'LinkedIn',  val: 'hongxiang-chen', href: PROFILE.linkedin },
-                { key: 'Ubicación', val: PROFILE.location, href: null },
+                { key: 'Email',     val: PROFILE.email,         href: `mailto:${PROFILE.email}`, Icon: IconMail     },
+                { key: 'LinkedIn',  val: 'hongxiang-chen',      href: PROFILE.linkedin,           Icon: IconLinkedIn },
+                { key: 'GitHub',    val: 'danichen655',         href: PROFILE.github,             Icon: IconGitHub   },
+                { key: 'Ubicación', val: PROFILE.location,      href: null,                       Icon: IconLocation },
               ].map(item => (
-                <div key={item.key} style={{
-                  display: 'flex',
-                  alignItems: isMobile ? 'flex-start' : 'baseline',
-                  gap: isMobile ? 12 : 24,
-                  flexDirection: isMobile ? 'column' : 'row',
-                }}>
+                <div
+                  key={item.key}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 14,
+                    padding: '12px 0',
+                    borderBottom: '1px solid var(--b1)',
+                  }}
+                >
+                  <span style={{ color: 'var(--t3)', flexShrink: 0 }}>
+                    <item.Icon />
+                  </span>
                   <span style={{
                     fontFamily: 'var(--ff-m)',
                     fontSize: 9.5,
                     letterSpacing: '0.16em',
                     textTransform: 'uppercase',
                     color: 'var(--t3)',
-                    minWidth: isMobile ? 'unset' : 80,
-                    whiteSpace: 'nowrap',
+                    minWidth: 70,
+                    flexShrink: 0,
                   }}>
                     {item.key}
                   </span>
@@ -233,11 +222,9 @@ export default function Profile() {
                       rel="noreferrer"
                       style={{
                         fontFamily: 'var(--ff-m)',
-                        fontSize: 14,
+                        fontSize: 13,
                         color: 'var(--t1)',
                         transition: 'color 0.2s',
-                        borderBottom: '1px solid var(--b2)',
-                        paddingBottom: 1,
                         wordBreak: 'break-word',
                       }}
                       onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
@@ -246,7 +233,7 @@ export default function Profile() {
                       {item.val} ↗
                     </a>
                   ) : (
-                    <span style={{ fontFamily: 'var(--ff-m)', fontSize: 14, color: 'var(--t2)' }}>
+                    <span style={{ fontFamily: 'var(--ff-m)', fontSize: 13, color: 'var(--t2)' }}>
                       {item.val}
                     </span>
                   )}

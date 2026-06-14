@@ -120,6 +120,9 @@ input, textarea { font: inherit; }
   body {
     cursor: auto;
   }
+  button {
+    cursor: auto;
+  }
   .cur-dot,
   .cur-ring {
     display: none;

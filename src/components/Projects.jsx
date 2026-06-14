@@ -7,7 +7,7 @@ function ProjectCard({ project, featured = false }) {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    const handleResize = () => setIsMobile(window.innerWidth <= 480)
     handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
@@ -182,7 +182,6 @@ export default function Projects() {
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'flex-end',
           marginBottom: isMobile ? 32 : 56,
           flexDirection: isMobile ? 'column' : 'row',
           gap: isMobile ? 16 : 0,
