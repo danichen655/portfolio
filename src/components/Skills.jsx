@@ -73,7 +73,7 @@ function SkillCard({ skill, index }) {
 
       {/* Skill list */}
       <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {skill.items.slice(0, isMobile ? 4 : undefined).map((item, i) => (
+        {skill.items.map((item, i) => (
           <li
             key={item}
             style={{
