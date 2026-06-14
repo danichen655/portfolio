@@ -11,6 +11,7 @@ const LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const navRef = useRef(null)
 
   useEffect(() => {
@@ -19,14 +20,25 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Detectar cambios de tamaño de ventana
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    
+    // Establecer valor inicial
+    handleResize()
+    
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const scrollTo = (e, href) => {
     e.preventDefault()
     const el = document.querySelector(href)
     if (el) el.scrollIntoView({ behavior: 'smooth' })
     setMenuOpen(false)
   }
-
-  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
 
   return (
     <nav ref={navRef} style={{
