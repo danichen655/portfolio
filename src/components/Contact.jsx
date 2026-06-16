@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { PROFILE } from '../data'
-
+import { useLanguage } from '../LanguageContext'
+import { i18n } from '../i18n'
 import { IconLinkedIn, IconGitHub, IconMail } from './Icons'
 
 const inView = (delay = 0) => ({
@@ -14,6 +15,8 @@ const inView = (delay = 0) => ({
 export default function Contact() {
   const [copied, setCopied] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const { lang } = useLanguage()
+  const t = i18n[lang].contact
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768)
@@ -79,7 +82,7 @@ export default function Contact() {
       >
         {/* Etiqueta */}
         <motion.p className="label" {...inView(0)} style={{ marginBottom: isMobile ? 24 : 32 }}>
-          Conectemos
+          {t.label}
         </motion.p>
 
         {/* Titular grande */}
@@ -94,9 +97,9 @@ export default function Contact() {
             marginBottom: isMobile ? 40 : 64,
           }}
         >
-          CONTACTAME.{' '}
+          {t.heading1}{' '}
           <span style={{ WebkitTextStroke: '1px var(--accent)', color: 'transparent' }}>
-            AHORA.
+            {t.heading2}
           </span>
         </motion.h2>
 
@@ -118,9 +121,7 @@ export default function Contact() {
               maxWidth: 460,
               marginBottom: isMobile ? 32 : 48,
             }}>
-              ¿Tienes un proyecto en mente? ¿Quieres explorar una colaboración?
-              O simplemente di hola. Siempre estoy abierto a conversaciones
-              interesantes y nuevas oportunidades.
+              {t.description}
             </p>
 
             {/* Email CTA */}
@@ -133,7 +134,7 @@ export default function Contact() {
                 color: 'var(--t3)',
                 marginBottom: 12,
               }}>
-                Correo electrónico
+                {t.emailLabel}
               </p>
               <div style={{
                 display: 'flex',
@@ -178,7 +179,7 @@ export default function Contact() {
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  {copied ? '¡Copiado!' : 'Copiar'}
+                  {copied ? t.copied : t.copy}
                 </button>
               </div>
             </div>
@@ -194,14 +195,14 @@ export default function Contact() {
               color: 'var(--t3)',
               marginBottom: 24,
             }}>
-              Encuéntrame en
+              {t.findMe}
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               {[
-                { label: 'LinkedIn', url: PROFILE.linkedin,          sub: 'Perfil profesional', Icon: IconLinkedIn },
-                { label: 'GitHub',   url: PROFILE.github,            sub: 'Repositorios',        Icon: IconGitHub   },
-                { label: 'Email',    url: `mailto:${PROFILE.email}`, sub: 'Mensaje directo',     Icon: IconMail     },
+                { label: 'LinkedIn', url: PROFILE.linkedin,          sub: t.linkedinSub, Icon: IconLinkedIn },
+                { label: 'GitHub',   url: PROFILE.github,            sub: t.githubSub,   Icon: IconGitHub   },
+                { label: 'Email',    url: `mailto:${PROFILE.email}`, sub: t.emailSub,    Icon: IconMail     },
               ].map(link => (
                 <a
                   key={link.label}
@@ -302,7 +303,7 @@ export default function Contact() {
             textTransform: 'uppercase',
             color: 'var(--t3)',
           }}>
-            Programador · Diseñador Visual · IA · Marca
+            {t.footerRoles}
           </span>
           <span style={{
             fontFamily: 'var(--ff-m)',
@@ -311,7 +312,7 @@ export default function Contact() {
             textTransform: 'uppercase',
             color: 'var(--t3)',
           }}>
-            Hecho con React + Vite
+            {t.footerMade}
           </span>
         </div>
       </div>

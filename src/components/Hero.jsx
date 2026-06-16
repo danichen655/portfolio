@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { PROFILE } from '../data'
+import { useLanguage } from '../LanguageContext'
+import { i18n } from '../i18n'
 import Particles from './Particles'
 
 const titleLine = {
@@ -19,6 +21,8 @@ const fadeIn = (delay = 0) => ({
 
 export default function Hero() {
   const [isMobile, setIsMobile] = useState(false)
+  const { lang } = useLanguage()
+  const t = i18n[lang].hero
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768)
@@ -131,7 +135,7 @@ export default function Hero() {
             fontSize: isMobile ? '8px' : '10.5px',
           }}
         >
-          Portafolio · {new Date().getFullYear()}
+          {t.label} · {new Date().getFullYear()}
         </motion.p>
 
         {/* Nombre en display grande */}
@@ -194,7 +198,7 @@ export default function Hero() {
             background: 'var(--b2)',
           }} />
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {PROFILE.roles.map((role) => (
+            {PROFILE.roles[lang].map((role) => (
               <span
                 key={role}
                 style={{
@@ -235,7 +239,7 @@ export default function Hero() {
           onMouseLeave={e => e.currentTarget.style.color = 'var(--t3)'}
         >
           <span style={{ width: 40, height: 1, background: 'currentColor', display: 'inline-block' }} />
-          Desplázate para explorar
+          {t.scroll}
         </motion.button>
       </div>
 

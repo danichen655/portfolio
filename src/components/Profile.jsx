@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { PROFILE } from '../data'
+import { useLanguage } from '../LanguageContext'
+import { i18n } from '../i18n'
 import { IconLinkedIn, IconGitHub, IconMail, IconLocation } from './Icons'
 
 const inView = (delay = 0) => ({
@@ -12,6 +14,8 @@ const inView = (delay = 0) => ({
 
 export default function Profile() {
   const [isMobile, setIsMobile] = useState(false)
+  const { lang } = useLanguage()
+  const t = i18n[lang].profile
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768)
@@ -115,7 +119,7 @@ export default function Profile() {
             >
               {PROFILE.stats.map(s => (
                 <div
-                  key={s.label}
+                  key={s.label.es}
                   style={{
                     padding: isMobile ? '16px 12px' : '24px 20px',
                     background: 'var(--s1)',
@@ -139,7 +143,7 @@ export default function Profile() {
                     color: 'var(--t3)',
                     marginTop: 6,
                   }}>
-                    {s.label}
+                    {s.label[lang]}
                   </div>
                 </div>
               ))}
@@ -149,7 +153,7 @@ export default function Profile() {
           {/* ── Right: Bio ──────────────────────────────────── */}
           <div style={{ paddingTop: isMobile ? 0 : 8 }}>
             <motion.p className="label" {...inView(0)} style={{ marginBottom: 20 }}>
-              Sobre mí
+              {t.label}
             </motion.p>
 
             <motion.h2
@@ -177,7 +181,7 @@ export default function Profile() {
                 marginBottom: 48,
               }}
             >
-              {PROFILE.bio}
+              {PROFILE.bio[lang]}
             </motion.p>
 
             {/* Divider */}
@@ -186,10 +190,10 @@ export default function Profile() {
             {/* Contact details */}
             <motion.div {...inView(0.3)} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               {[
-                { key: 'Email',     val: PROFILE.email,         href: `mailto:${PROFILE.email}`, Icon: IconMail     },
-                { key: 'LinkedIn',  val: 'hongxiang-chen',      href: PROFILE.linkedin,           Icon: IconLinkedIn },
-                { key: 'GitHub',    val: 'danichen655',         href: PROFILE.github,             Icon: IconGitHub   },
-                { key: 'Ubicación', val: PROFILE.location,      href: null,                       Icon: IconLocation },
+                { key: t.email,    val: PROFILE.email,         href: `mailto:${PROFILE.email}`, Icon: IconMail     },
+                { key: t.linkedin, val: 'hongxiang-chen',      href: PROFILE.linkedin,           Icon: IconLinkedIn },
+                { key: t.github,   val: 'danichen655',         href: PROFILE.github,             Icon: IconGitHub   },
+                { key: t.location, val: PROFILE.location[lang], href: null,                      Icon: IconLocation },
               ].map(item => (
                 <div
                   key={item.key}
@@ -243,7 +247,7 @@ export default function Profile() {
 
             {/* Discipline tags */}
             <motion.div {...inView(0.4)} style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 48 }}>
-              {PROFILE.roles.map(role => (
+              {PROFILE.roles[lang].map(role => (
                 <span
                   key={role}
                   style={{

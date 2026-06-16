@@ -1,3 +1,4 @@
+import { LanguageProvider } from './LanguageContext'
 import Cursor   from './components/Cursor'
 import Navbar   from './components/Navbar'
 import Hero     from './components/Hero'
@@ -9,7 +10,7 @@ import Contact  from './components/Contact'
 
 export default function App() {
   return (
-    <>
+    <LanguageProvider>
       <Cursor />
       <Navbar />
       <main>
@@ -25,6 +26,6 @@ export default function App() {
         <div className="section-line" />
         <Contact />
       </main>
-    </>
+    </LanguageProvider>
   )
 }

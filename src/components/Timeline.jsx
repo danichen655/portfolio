@@ -1,6 +1,17 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { TIMELINE } from '../data'
+import { useLanguage } from '../LanguageContext'
+import { i18n } from '../i18n'
+
+function highlight(text) {
+  const parts = text.split(/\*\*(.+?)\*\*/)
+  return parts.map((part, i) =>
+    i % 2 === 1
+      ? <span key={i} style={{ color: 'var(--accent)', fontWeight: 500 }}>{part}</span>
+      : part
+  )
+}
 
 const inView = (delay = 0) => ({
   initial:     { opacity: 0, y: 24 },
@@ -11,6 +22,8 @@ const inView = (delay = 0) => ({
 
 export default function Timeline() {
   const [isMobile, setIsMobile] = useState(false)
+  const { lang } = useLanguage()
+  const t = i18n[lang].timeline
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768)
@@ -34,7 +47,7 @@ export default function Timeline() {
           transition={{ duration: 1.0 }}
           style={{ marginBottom: 14 }}
         >
-          Trayectoria
+          {t.label}
         </motion.p>
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -50,8 +63,8 @@ export default function Timeline() {
             marginBottom: isMobile ? 48 : 72,
           }}
         >
-          Experiencia &{' '}
-          <span style={{ color: 'var(--accent)' }}>Formación</span>
+          {t.title1}{' '}
+          <span style={{ color: 'var(--accent)' }}>{t.title2}</span>
         </motion.h2>
 
         {/* Timeline */}
@@ -96,9 +109,9 @@ export default function Timeline() {
               {!isMobile && (
                 <div style={{
                   fontFamily: 'var(--ff-m)',
-                  fontSize: 10,
-                  letterSpacing: '0.1em',
-                  color: 'var(--t3)',
+                  fontSize: 12,
+                  letterSpacing: '0.08em',
+                  color: 'var(--t2)',
                   paddingTop: 3,
                   paddingRight: 36,
                   textAlign: 'right',
@@ -114,9 +127,9 @@ export default function Timeline() {
                 {isMobile && (
                   <div style={{
                     fontFamily: 'var(--ff-m)',
-                    fontSize: 9,
-                    letterSpacing: '0.12em',
-                    color: 'var(--t3)',
+                    fontSize: 11,
+                    letterSpacing: '0.1em',
+                    color: 'var(--t2)',
                     marginBottom: 10,
                   }}>
                     {item.year}
@@ -127,23 +140,23 @@ export default function Timeline() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10, flexWrap: 'wrap' }}>
                   <span style={{
                     fontFamily: 'var(--ff-m)',
-                    fontSize: 8.5,
-                    letterSpacing: '0.12em',
+                    fontSize: 11,
+                    letterSpacing: '0.1em',
                     textTransform: 'uppercase',
                     color: item.type === 'work' ? 'var(--accent)' : 'var(--t2)',
                     border: `1px solid ${item.type === 'work' ? 'rgba(200,255,0,0.35)' : 'var(--b2)'}`,
-                    padding: '3px 8px',
+                    padding: '4px 10px',
                   }}>
-                    {item.type === 'work' ? 'Trabajo' : 'Formación'}
+                    {item.type === 'work' ? t.work : t.education}
                   </span>
                   <span style={{
                     fontFamily: 'var(--ff-m)',
-                    fontSize: 9,
+                    fontSize: 11,
                     letterSpacing: '0.1em',
                     textTransform: 'uppercase',
-                    color: 'var(--t3)',
+                    color: 'var(--t2)',
                   }}>
-                    {item.location}
+                    {item.location[lang]}
                   </span>
                 </div>
 
@@ -156,31 +169,70 @@ export default function Timeline() {
                   color: 'var(--t1)',
                   marginBottom: 4,
                 }}>
-                  {item.title}
+                  {item.title[lang]}
                 </h3>
 
-                {/* Org */}
-                <p style={{
-                  fontFamily: 'var(--ff-m)',
-                  fontSize: isMobile ? 11 : 12,
-                  letterSpacing: '0.08em',
-                  color: 'var(--t2)',
-                  marginBottom: item.description ? 12 : 0,
-                }}>
-                  {item.org}
-                </p>
+                {/* Org + notas */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap', marginBottom: item.description ? 14 : 0 }}>
+                  <p style={{
+                    fontFamily: 'var(--ff-m)',
+                    fontSize: isMobile ? 11 : 12,
+                    letterSpacing: '0.08em',
+                    color: 'var(--t2)',
+                    margin: 0,
+                  }}>
+                    {item.org}
+                  </p>
+                  {item.grade && (
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <span style={{
+                        fontFamily: 'var(--ff-m)',
+                        fontSize: 10,
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                        color: 'var(--accent)',
+                        border: '1px solid rgba(200,255,0,0.35)',
+                        padding: '3px 8px',
+                      }}>
+                        {t.grade} {item.grade.value}
+                      </span>
+                      <span style={{
+                        fontFamily: 'var(--ff-m)',
+                        fontSize: 10,
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                        color: 'var(--t2)',
+                        border: '1px solid var(--b2)',
+                        padding: '3px 8px',
+                      }}>
+                        {t.tfm} {item.grade.tfm}
+                      </span>
+                    </div>
+                  )}
+                </div>
 
                 {/* Description */}
-                {item.description && (
-                  <p style={{
-                    fontSize: isMobile ? 13 : 14,
-                    lineHeight: 1.75,
-                    color: 'var(--t3)',
-                    maxWidth: 560,
-                  }}>
-                    {item.description}
-                  </p>
-                )}
+                {(() => {
+                  const desc = item.description ? item.description[lang] : null
+                  if (!desc) return null
+                  if (Array.isArray(desc)) {
+                    return (
+                      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6, maxWidth: 560 }}>
+                        {desc.map((point, j) => (
+                          <li key={j} style={{ display: 'flex', gap: 10, fontSize: isMobile ? 13 : 14, lineHeight: 1.7, color: 'var(--t3)' }}>
+                            <span style={{ color: 'var(--accent)', flexShrink: 0, marginTop: 2 }}>–</span>
+                            <span>{highlight(point)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )
+                  }
+                  return (
+                    <p style={{ fontSize: isMobile ? 13 : 14, lineHeight: 1.75, color: 'var(--t3)', maxWidth: 560 }}>
+                      {desc}
+                    </p>
+                  )
+                })()}
               </div>
             </motion.div>
           ))}

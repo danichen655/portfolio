@@ -1,19 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { PROFILE } from '../data'
+import { useLanguage } from '../LanguageContext'
+import { i18n } from '../i18n'
 
 const LINKS = [
-  { label: 'Trabajos',    href: '#work'     },
-  { label: 'Perfil',      href: '#about'    },
-  { label: 'Trayectoria', href: '#timeline' },
-  { label: 'Habilidades', href: '#skills'   },
-  { label: 'Contacto',    href: '#contact'  },
+  { key: 'works',    href: '#work'     },
+  { key: 'profile',  href: '#about'    },
+  { key: 'timeline', href: '#timeline' },
+  { key: 'skills',   href: '#skills'   },
+  { key: 'contact',  href: '#contact'  },
 ]
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const { lang, toggle, chineseUnlocked } = useLanguage()
+  const t = i18n[lang].nav
   const navRef = useRef(null)
 
   useEffect(() => {
@@ -96,40 +100,59 @@ export default function Navbar() {
                 onMouseEnter={e => e.currentTarget.style.color = 'var(--t1)'}
                 onMouseLeave={e => e.currentTarget.style.color = 'var(--t2)'}
               >
-                {l.label}
+                {t[l.key]}
               </a>
             </li>
           ))}
         </ul>
       )}
 
-      {/* Desktop CTA */}
+      {/* Desktop CTA + lang toggle */}
       {!isMobile && (
-        <a
-          href={`mailto:${PROFILE.email}`}
-          style={{
-            fontFamily: 'var(--ff-m)',
-            fontSize: 11,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: 'var(--accent)',
-            border: '1px solid rgba(200,255,0,0.3)',
-            padding: '9px 22px',
-            transition: 'background 0.25s, color 0.25s, border-color 0.25s',
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = 'var(--accent)'
-            e.currentTarget.style.color = '#080808'
-            e.currentTarget.style.borderColor = 'var(--accent)'
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = 'transparent'
-            e.currentTarget.style.color = 'var(--accent)'
-            e.currentTarget.style.borderColor = 'rgba(200,255,0,0.3)'
-          }}
-        >
-          Contactame
-        </a>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          {chineseUnlocked && (
+            <button
+              onClick={toggle}
+              style={{
+                fontFamily: 'var(--ff-m)',
+                fontSize: 11,
+                letterSpacing: '0.14em',
+                color: 'var(--t3)',
+                transition: 'color 0.2s',
+                padding: '4px 0',
+              }}
+              onMouseEnter={e => e.currentTarget.style.color = 'var(--t1)'}
+              onMouseLeave={e => e.currentTarget.style.color = 'var(--t3)'}
+            >
+              {lang === 'es' ? '中文' : 'ESP'}
+            </button>
+          )}
+          <a
+            href={`mailto:${PROFILE.email}`}
+            style={{
+              fontFamily: 'var(--ff-m)',
+              fontSize: 11,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: 'var(--accent)',
+              border: '1px solid rgba(200,255,0,0.3)',
+              padding: '9px 22px',
+              transition: 'background 0.25s, color 0.25s, border-color 0.25s',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'var(--accent)'
+              e.currentTarget.style.color = '#080808'
+              e.currentTarget.style.borderColor = 'var(--accent)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'transparent'
+              e.currentTarget.style.color = 'var(--accent)'
+              e.currentTarget.style.borderColor = 'rgba(200,255,0,0.3)'
+            }}
+          >
+            {t.cta}
+          </a>
+        </div>
       )}
 
       {/* Mobile Menu Button */}
@@ -194,29 +217,47 @@ export default function Navbar() {
                   borderBottom: '1px solid rgba(255,255,255,0.05)',
                 }}
               >
-                {l.label}
+                {t[l.key]}
               </motion.a>
             ))}
-            <motion.a
-              href={`mailto:${PROFILE.email}`}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1], delay: LINKS.length * 0.05 }}
-              style={{
-                fontFamily: 'var(--ff-m)',
-                fontSize: 12,
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                color: 'var(--accent)',
-                border: '1px solid rgba(200,255,0,0.3)',
-                padding: '10px 16px',
-                marginTop: 8,
-                textAlign: 'center',
-                transition: 'background 0.25s, color 0.25s, border-color 0.25s',
-              }}
-            >
-              Contactame
-            </motion.a>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
+              <motion.a
+                href={`mailto:${PROFILE.email}`}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1], delay: LINKS.length * 0.05 }}
+                style={{
+                  fontFamily: 'var(--ff-m)',
+                  fontSize: 12,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: 'var(--accent)',
+                  border: '1px solid rgba(200,255,0,0.3)',
+                  padding: '10px 16px',
+                  textAlign: 'center',
+                  flex: 1,
+                }}
+              >
+                {t.cta}
+              </motion.a>
+              {chineseUnlocked && (
+                <motion.button
+                  onClick={toggle}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.25, delay: (LINKS.length + 1) * 0.05 }}
+                  style={{
+                    fontFamily: 'var(--ff-m)',
+                    fontSize: 11,
+                    letterSpacing: '0.12em',
+                    color: 'var(--t3)',
+                    padding: '10px 16px',
+                  }}
+                >
+                  {lang === 'es' ? '中文' : 'ESP'}
+                </motion.button>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

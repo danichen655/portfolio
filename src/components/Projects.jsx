@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { PROJECTS } from '../data'
+import { useLanguage } from '../LanguageContext'
+import { i18n } from '../i18n'
 
-function ProjectCard({ project, featured = false }) {
+function ProjectCard({ project, featured = false, lang }) {
   const [hovered, setHovered] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
@@ -71,7 +73,7 @@ function ProjectCard({ project, featured = false }) {
           textTransform: 'uppercase',
           color: 'rgba(255,255,255,0.5)',
         }}>
-          {project.category}
+          {project.category[lang]}
         </span>
         <span style={{
           fontFamily: 'var(--ff-m)',
@@ -100,7 +102,7 @@ function ProjectCard({ project, featured = false }) {
           color: 'var(--t1)',
           marginBottom: 10,
         }}>
-          {project.title}
+          {project.title[lang]}
         </h3>
 
         {/* Description - reveals on hover (mobile shows on tap) */}
@@ -117,7 +119,7 @@ function ProjectCard({ project, featured = false }) {
               color: 'rgba(255,255,255,0.55)',
               marginBottom: 14,
             }}>
-              {project.description}
+              {project.description[lang]}
             </p>
           </div>
         )}
@@ -160,6 +162,8 @@ function ProjectCard({ project, featured = false }) {
 export default function Projects() {
   const [isMobile, setIsMobile] = useState(false)
   const [isTablet, setIsTablet] = useState(false)
+  const { lang } = useLanguage()
+  const t = i18n[lang].projects
 
   useEffect(() => {
     const handleResize = () => {
@@ -196,7 +200,7 @@ export default function Projects() {
               transition={{ duration: 0.6 }}
               style={{ marginBottom: 14 }}
             >
-              Trabajos Seleccionados
+              {t.label}
             </motion.p>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -211,7 +215,7 @@ export default function Projects() {
                 lineHeight: 1,
               }}
             >
-              Proyectos Destacados
+              {t.title}
             </motion.h2>
           </div>
 
@@ -228,14 +232,14 @@ export default function Projects() {
               paddingBottom: isMobile ? 0 : 8,
             }}
           >
-            {PROJECTS.length} proyectos en total
+            {t.count(PROJECTS.length)}
           </motion.p>
         </div>
 
         {/* Featured project */}
         {featured && !isMobile && (
           <div style={{ marginBottom: 2 }}>
-            <ProjectCard project={featured} featured />
+            <ProjectCard project={featured} featured lang={lang} />
           </div>
         )}
 
@@ -246,7 +250,7 @@ export default function Projects() {
           gap: 2,
         }}>
           {rest.slice(0, isMobile ? 2 : 3).map(p => (
-            <ProjectCard key={p.id} project={p} />
+            <ProjectCard key={p.id} project={p} lang={lang} />
           ))}
         </div>
 
@@ -259,7 +263,7 @@ export default function Projects() {
             marginTop: 2,
           }}>
             {rest.slice(3, isMobile ? 4 : 5).map(p => (
-              <ProjectCard key={p.id} project={p} />
+              <ProjectCard key={p.id} project={p} lang={lang} />
             ))}
           </div>
         )}

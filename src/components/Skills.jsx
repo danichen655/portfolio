@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { SKILLS } from '../data'
+import { useLanguage } from '../LanguageContext'
+import { i18n } from '../i18n'
 
-function SkillCard({ skill, index }) {
+function SkillCard({ skill, index, lang }) {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -65,7 +67,7 @@ function SkillCard({ skill, index }) {
         marginBottom: 20,
         color: 'var(--t1)',
       }}>
-        {skill.category}
+        {skill.category[lang]}
       </h3>
 
       {/* Divider */}
@@ -73,7 +75,7 @@ function SkillCard({ skill, index }) {
 
       {/* Skill list */}
       <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {skill.items.map((item, i) => (
+        {skill.items[lang].map((item, i) => (
           <li
             key={item}
             style={{
@@ -116,6 +118,8 @@ function SkillCard({ skill, index }) {
 export default function Skills() {
   const [isMobile, setIsMobile] = useState(false)
   const [isTablet, setIsTablet] = useState(false)
+  const { lang } = useLanguage()
+  const t = i18n[lang].skills
 
   useEffect(() => {
     const handleResize = () => {
@@ -148,7 +152,7 @@ export default function Skills() {
               transition={{ duration: 0.6 }}
               style={{ marginBottom: 14 }}
             >
-              Experiencia
+              {t.label}
             </motion.p>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -163,8 +167,8 @@ export default function Skills() {
                 lineHeight: 1,
               }}
             >
-              Fortalezas &{' '}
-              <span style={{ color: 'var(--accent)' }}>Habilidades</span>
+              {t.title1}{' '}
+              <span style={{ color: 'var(--accent)' }}>{t.title2}</span>
             </motion.h2>
           </div>
 
@@ -180,7 +184,7 @@ export default function Skills() {
               maxWidth: 480,
             }}
           >
-            Cuatro disciplinas, una práctica unificada. Trabajo en todo el espectro — desde escribir código hasta construir marcas — aportando pensamiento sistemático a los problemas creat[...]
+            {t.description}
           </motion.p>
         </div>
 
@@ -191,7 +195,7 @@ export default function Skills() {
           gap: 2,
         }}>
           {SKILLS.map((skill, i) => (
-            <SkillCard key={skill.category} skill={skill} index={i} />
+            <SkillCard key={skill.category.es} skill={skill} index={i} lang={lang} />
           ))}
         </div>
 
